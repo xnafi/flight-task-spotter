@@ -1,6 +1,6 @@
 "use client";
 
-import { CabinType, TripType } from "@/app/types/allTypes";
+import { CabinType, TripType } from "@/types/allTypes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
