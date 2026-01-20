@@ -3,6 +3,7 @@
 import { CabinType, TripType } from "@/types/allTypes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import clsx from "clsx";
 import { ReInput } from "../re-ui/Re-Input";
 import { TripTypeToggle } from "@/components/TripTypeToggle";
 import { ReSelect } from "../re-ui/ReSelect";
@@ -22,29 +23,26 @@ export function SearchBar() {
 
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+
   const today = new Date().toISOString().split("T")[0];
   const [date, setDate] = useState(today);
   const [returnDate, setReturnDate] = useState("");
+
   const [passengers, setPassengers] = useState(1);
   const [errors, setErrors] = useState<FormErrors>({});
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     const newErrors: FormErrors = {};
 
-    // Validation
-    if (!from.trim()) {
-      newErrors.from = "Departure city is required";
-    }
-    if (!to.trim()) {
-      newErrors.to = "Arrival city is required";
-    }
-    if (!date) {
-      newErrors.date = "Departure date is required";
-    }
+    if (!from.trim()) newErrors.from = "Departure city is required";
+    if (!to.trim()) newErrors.to = "Arrival city is required";
+    if (!date) newErrors.date = "Departure date is required";
 
     const selectedDate = new Date(date);
     const todayDate = new Date(today);
+
     if (selectedDate < todayDate) {
       newErrors.date = "Departure date cannot be in the past";
     }
@@ -62,10 +60,7 @@ export function SearchBar() {
 
     setErrors(newErrors);
 
-    // If there are errors, don't submit
-    if (Object.keys(newErrors).length > 0) {
-      return;
-    }
+    if (Object.keys(newErrors).length > 0) return;
 
     const params = new URLSearchParams({
       from,
@@ -86,16 +81,20 @@ export function SearchBar() {
   return (
     <form
       onSubmit={onSubmit}
-      className="sticky top-4 z-50 mx-auto rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-[0_0_40px_rgba(99,102,241,0.35)] p-4"
+      className={clsx(
+        "sticky top-4 z-50 mx-auto rounded-2xl border border-white/20",
+        "bg-white/10 backdrop-blur-xl shadow-[0_0_40px_rgba(99,102,241,0.35)] p-4",
+      )}
     >
-      {/* Trip Type Toggle */}
+      {/* Trip Type */}
       <div className="mb-4 flex justify-center md:justify-start">
         <TripTypeToggle value={tripType} onChange={setTripType} />
       </div>
 
       {/* Inputs */}
-      <div className="lg:flex flex-wrap items-center gap-4 w-full justify-between grid grid-cols-2">
-        <div className="w-full">
+      <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-4 w-full items-start">
+        {/* From */}
+        <div className="flex flex-col gap-1">
           <ReInput
             id="from"
             label="From"
@@ -107,12 +106,11 @@ export function SearchBar() {
             placeHolder=" "
             className="glass-input"
           />
-          {errors.from && (
-            <p className="mt-1 text-sm text-red-400">{errors.from}</p>
-          )}
+          <p className="min-h-4 text-xs text-red-400">{errors.from ?? ""}</p>
         </div>
 
-        <div className="w-full">
+        {/* To */}
+        <div className="flex flex-col gap-1">
           <ReInput
             id="to"
             label="To"
@@ -124,52 +122,54 @@ export function SearchBar() {
             placeHolder=" "
             className="glass-input"
           />
-          {errors.to && (
-            <p className="mt-1 text-sm text-red-400">{errors.to}</p>
-          )}
+          <p className="min-h-4 text-xs text-red-400">{errors.to ?? ""}</p>
         </div>
 
-        <div className="w-full">
+        {/* Departure */}
+        <div className="flex flex-col gap-1">
           <ReInput
             id="date"
             type="date"
             label="Departure"
             value={date}
+            min={today}
             onChange={(e) => {
               setDate(e.target.value);
               if (errors.date) setErrors({ ...errors, date: undefined });
             }}
             placeHolder=" "
             className="glass-input"
-            min={today}
           />
-          {errors.date && (
-            <p className="mt-1 text-sm text-red-400">{errors.date}</p>
-          )}
+          <p className="min-h-4 text-xs text-red-400">{errors.date ?? ""}</p>
         </div>
 
+        {/* Return */}
         {tripType === "round" && (
-          <div className="w-full">
+          <div className="flex flex-col gap-1">
             <ReInput
               id="returnDate"
               type="date"
               label="Return"
               value={returnDate}
+              min={date}
               onChange={(e) => {
                 setReturnDate(e.target.value);
                 if (errors.returnDate)
-                  setErrors({ ...errors, returnDate: undefined });
+                  setErrors({
+                    ...errors,
+                    returnDate: undefined,
+                  });
               }}
               placeHolder=" "
               className="glass-input"
-              min={date}
             />
-            {errors.returnDate && (
-              <p className="mt-1 text-sm text-red-400">{errors.returnDate}</p>
-            )}
+            <p className="min-h-4 text-xs text-red-400">
+              {errors.returnDate ?? ""}
+            </p>
           </div>
         )}
 
+        {/* Cabin */}
         <ReSelect
           id="cabin"
           label="Cabin"
@@ -184,6 +184,7 @@ export function SearchBar() {
           ]}
         />
 
+        {/* Passengers */}
         <ReSelect
           id="passengers"
           label="Passengers"
@@ -200,7 +201,10 @@ export function SearchBar() {
         <div className="min-w-40">
           <button
             type="submit"
-            className="w-full rounded-xl bg-linear-to-r from-indigo-500 to-cyan-500 px-6 py-2 font-semibold text-white shadow-lg transition hover:scale-[1.02]"
+            className={clsx(
+              "w-full rounded-md bg-linear-to-r bg-indigo-500",
+              "px-6 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.02]",
+            )}
           >
             Search Flights
           </button>

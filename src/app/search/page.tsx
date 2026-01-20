@@ -1,5 +1,6 @@
 import { searchParamsSchema } from "@/lib/validation";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function SearchPage({ searchParams }: any) {
   const params = await searchParams;
 
@@ -10,7 +11,7 @@ export default async function SearchPage({ searchParams }: any) {
       <div className="p-4">
         <h1 className="text-2xl font-bold text-red-500">Invalid Search Parameters</h1>
         <div className="mt-4 text-red-600">
-          {validation.error.errors.map((err, idx) => (
+          {validation.error.issues.map((err, idx) => (
             <p key={idx}>
               {err.path.join(".")}: {err.message}
             </p>
