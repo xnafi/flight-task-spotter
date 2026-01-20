@@ -4,6 +4,7 @@ import { CabinType, TripType } from "@/types/allTypes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ReInput } from "../re-ui/Re-Input";
+import { TripTypeToggle } from "@/components/TripTypeToggle";
 
 export function SearchBar() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export function SearchBar() {
       onSubmit={onSubmit}
       className="
         sticky top-4 z-50
-        mx-auto max-w-6xl
+        mx-auto 
         rounded-2xl
         border border-white/20
         bg-white/10 backdrop-blur-xl
@@ -49,33 +50,13 @@ export function SearchBar() {
         p-4
       "
     >
-      {/* Trip Type */}
-      <div className="mb-4 flex gap-2">
-        {[
-          { label: "One Way", value: "oneway" },
-          { label: "Round Trip", value: "round" },
-          { label: "Multi City", value: "multi" },
-        ].map((t) => (
-          <button
-            key={t.value}
-            type="button"
-            onClick={() => setTripType(t.value as TripType)}
-            className={`
-              rounded-xl px-4 py-2 text-sm font-medium transition
-              ${
-                tripType === t.value
-                  ? "bg-indigo-500 text-white shadow"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
-              }
-            `}
-          >
-            {t.label}
-          </button>
-        ))}
+      {/* Trip Type Toggle */}
+      <div className="mb-4 flex justify-center md:justify-start">
+        <TripTypeToggle value={tripType} onChange={setTripType} />
       </div>
 
       {/* Inputs */}
-      <div className="grid gap-3 md:grid-cols-6">
+      <div className="flex justify-between items-center gap-4 flex-wrap ">
         <ReInput
           id="from"
           label="From"
@@ -116,7 +97,6 @@ export function SearchBar() {
           />
         )}
 
-        {/* Cabin Type */}
         <select
           value={cabin}
           onChange={(e) => setCabin(e.target.value as CabinType)}
@@ -128,7 +108,6 @@ export function SearchBar() {
           <option value="first">First Class</option>
         </select>
 
-        {/* Passengers */}
         <select
           value={passengers}
           onChange={(e) => setPassengers(Number(e.target.value))}
@@ -140,23 +119,22 @@ export function SearchBar() {
             </option>
           ))}
         </select>
-      </div>
-
-      {/* CTA */}
-      <div className="mt-4">
-        <button
-          type="submit"
-          className="
+        {/* CTA */}
+        <div className="">
+          <button
+            type="submit"
+            className="
             w-full rounded-xl
             bg-linear-to-r from-indigo-500 to-cyan-500
-            px-6 py-3
+            px-6 py-2
             font-semibold text-white
             shadow-lg
             transition hover:scale-[1.02]
           "
-        >
-          Search Flights
-        </button>
+          >
+            Search Flights
+          </button>
+        </div>
       </div>
     </form>
   );
