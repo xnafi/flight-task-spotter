@@ -28,15 +28,7 @@ export function TripTypeToggle({ value, onChange }: TripTypeToggleProps) {
     >
       {/* Sliding indicator */}
       <div
-        className="
-          absolute inset-y-1
-          left-1
-          w-[calc(100%/3)]
-          rounded-lg
-          bg-indigo-500
-          transition-transform duration-500
-          ease-[cubic-bezier(0.33,0.83,0.99,0.98)]
-        "
+        className="absolute inset-y-1 left-1 w-[calc(100%/3)] rounded-lg bg-indigo-500 transition-transform duration-500 ease-[cubic-bezier(0.33,0.83,0.99,0.98)]"
         style={{ transform: `translateX(${activeIndex * 100}%)` }}
       />
 
@@ -45,15 +37,7 @@ export function TripTypeToggle({ value, onChange }: TripTypeToggleProps) {
           key={opt.value}
           type="button"
           onClick={() => onChange(opt.value)}
-          className={clsx(
-            `
-              relative z-10
-              flex h-9
-              items-center justify-center
-              text-xs sm:text-sm
-              font-medium
-              transition-colors
-            `,
+          className={clsx(`relative z-10 flex h-9 items-center justify-center text-xs sm:text-sm font-medium transition-colors duration-300`,
             value === opt.value
               ? "text-white"
               : "text-white/70 hover:text-white",
