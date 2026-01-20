@@ -7,6 +7,13 @@ import { ReInput } from "../re-ui/Re-Input";
 import { TripTypeToggle } from "@/components/TripTypeToggle";
 import { ReSelect } from "../re-ui/ReSelect";
 
+interface FormErrors {
+  from?: string;
+  to?: string;
+  date?: string;
+  returnDate?: string;
+}
+
 export function SearchBar() {
   const router = useRouter();
 
@@ -15,12 +22,50 @@ export function SearchBar() {
 
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [date, setDate] = useState("2026-05-25");
+  const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(today);
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    const newErrors: FormErrors = {};
+
+    // Validation
+    if (!from.trim()) {
+      newErrors.from = "Departure city is required";
+    }
+    if (!to.trim()) {
+      newErrors.to = "Arrival city is required";
+    }
+    if (!date) {
+      newErrors.date = "Departure date is required";
+    }
+
+    const selectedDate = new Date(date);
+    const todayDate = new Date(today);
+    if (selectedDate < todayDate) {
+      newErrors.date = "Departure date cannot be in the past";
+    }
+
+    if (tripType === "round" && !returnDate) {
+      newErrors.returnDate = "Return date is required";
+    }
+
+    if (tripType === "round" && returnDate) {
+      const returnDateObj = new Date(returnDate);
+      if (returnDateObj <= selectedDate) {
+        newErrors.returnDate = "Return date must be after departure date";
+      }
+    }
+
+    setErrors(newErrors);
+
+    // If there are errors, don't submit
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
 
     const params = new URLSearchParams({
       from,
@@ -50,44 +95,79 @@ export function SearchBar() {
 
       {/* Inputs */}
       <div className="lg:flex flex-wrap items-center gap-4 w-full justify-between grid grid-cols-2">
-        <ReInput
-          id="from"
-          label="From"
-          value={from}
-          onChange={(e) => setFrom(e.target.value)}
-          placeHolder=" "
-          className="glass-input"
-        />
-
-        <ReInput
-          id="to"
-          label="To"
-          value={to}
-          onChange={(e) => setTo(e.target.value)}
-          placeHolder=" "
-          className="glass-input"
-        />
-
-        <ReInput
-          id="date"
-          type="date"
-          label="Departure"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          placeHolder=" "
-          className="glass-input"
-        />
-
-        {tripType === "round" && (
+        <div className="w-full">
           <ReInput
-            id="returnDate"
-            type="date"
-            label="Return"
-            value={returnDate}
-            onChange={(e) => setReturnDate(e.target.value)}
+            id="from"
+            label="From"
+            value={from}
+            onChange={(e) => {
+              setFrom(e.target.value);
+              if (errors.from) setErrors({ ...errors, from: undefined });
+            }}
             placeHolder=" "
             className="glass-input"
           />
+          {errors.from && (
+            <p className="mt-1 text-sm text-red-400">{errors.from}</p>
+          )}
+        </div>
+
+        <div className="w-full">
+          <ReInput
+            id="to"
+            label="To"
+            value={to}
+            onChange={(e) => {
+              setTo(e.target.value);
+              if (errors.to) setErrors({ ...errors, to: undefined });
+            }}
+            placeHolder=" "
+            className="glass-input"
+          />
+          {errors.to && (
+            <p className="mt-1 text-sm text-red-400">{errors.to}</p>
+          )}
+        </div>
+
+        <div className="w-full">
+          <ReInput
+            id="date"
+            type="date"
+            label="Departure"
+            value={date}
+            onChange={(e) => {
+              setDate(e.target.value);
+              if (errors.date) setErrors({ ...errors, date: undefined });
+            }}
+            placeHolder=" "
+            className="glass-input"
+            min={today}
+          />
+          {errors.date && (
+            <p className="mt-1 text-sm text-red-400">{errors.date}</p>
+          )}
+        </div>
+
+        {tripType === "round" && (
+          <div className="w-full">
+            <ReInput
+              id="returnDate"
+              type="date"
+              label="Return"
+              value={returnDate}
+              onChange={(e) => {
+                setReturnDate(e.target.value);
+                if (errors.returnDate)
+                  setErrors({ ...errors, returnDate: undefined });
+              }}
+              placeHolder=" "
+              className="glass-input"
+              min={date}
+            />
+            {errors.returnDate && (
+              <p className="mt-1 text-sm text-red-400">{errors.returnDate}</p>
+            )}
+          </div>
         )}
 
         <ReSelect

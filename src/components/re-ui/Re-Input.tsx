@@ -9,7 +9,8 @@ export function ReInput({
   onChange,
   className = "",
   placeHolder = " ",
-}: InputProps) {
+  ...rest
+}: InputProps & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div className="relative w-full lg:w-fit">
       <input
@@ -20,6 +21,7 @@ export function ReInput({
         onChange={onChange}
         placeholder={placeHolder}
         className={` peer w-full text-md px-2.5 pt-4 pb-2 border-2 border-[#12a4e5] rounded-[5px] focus:outline-none placeholder:text-transparent${className}`}
+        {...rest}
       />
 
       <label
