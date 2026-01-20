@@ -11,7 +11,7 @@ export function ReInput({
   placeHolder = " ",
 }: InputProps) {
   return (
-    <div className="relative w-fit">
+    <div className="relative w-full lg:w-fit">
       <input
         id={id}
         name={name ?? id}
