@@ -3,6 +3,7 @@
 import { CabinType, TripType } from "@/types/allTypes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ReInput } from "../re-ui/Re-Input";
 
 export function SearchBar() {
   const router = useRouter();
@@ -10,8 +11,8 @@ export function SearchBar() {
   const [tripType, setTripType] = useState<TripType>("oneway");
   const [cabin, setCabin] = useState<CabinType>("economy");
 
-  const [from, setFrom] = useState("NYC");
-  const [to, setTo] = useState("LAX");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [date, setDate] = useState("2026-05-25");
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
@@ -60,8 +61,7 @@ export function SearchBar() {
             type="button"
             onClick={() => setTripType(t.value as TripType)}
             className={`
-              rounded-xl px-4 py-2 text-sm font-medium
-              transition
+              rounded-xl px-4 py-2 text-sm font-medium transition
               ${
                 tripType === t.value
                   ? "bg-indigo-500 text-white shadow"
@@ -76,32 +76,42 @@ export function SearchBar() {
 
       {/* Inputs */}
       <div className="grid gap-3 md:grid-cols-6">
-        <input
+        <ReInput
+          id="from"
+          label="From"
           value={from}
           onChange={(e) => setFrom(e.target.value)}
-          placeholder="From"
+          placeHolder=" "
           className="glass-input"
         />
 
-        <input
+        <ReInput
+          id="to"
+          label="To"
           value={to}
           onChange={(e) => setTo(e.target.value)}
-          placeholder="To"
+          placeHolder=" "
           className="glass-input"
         />
 
-        <input
+        <ReInput
+          id="date"
           type="date"
+          label="Departure"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          placeHolder=" "
           className="glass-input"
         />
 
         {tripType === "round" && (
-          <input
+          <ReInput
+            id="returnDate"
             type="date"
+            label="Return"
             value={returnDate}
             onChange={(e) => setReturnDate(e.target.value)}
+            placeHolder=" "
             className="glass-input"
           />
         )}
@@ -110,7 +120,7 @@ export function SearchBar() {
         <select
           value={cabin}
           onChange={(e) => setCabin(e.target.value as CabinType)}
-          className="glass-input"
+          className="glass-input rounded-xl"
         >
           <option value="economy">Economy</option>
           <option value="premium">Premium Economy</option>
@@ -122,7 +132,7 @@ export function SearchBar() {
         <select
           value={passengers}
           onChange={(e) => setPassengers(Number(e.target.value))}
-          className="glass-input"
+          className="glass-input rounded-xl"
         >
           {[1, 2, 3, 4, 5, 6].map((p) => (
             <option key={p} value={p}>
