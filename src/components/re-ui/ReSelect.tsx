@@ -9,13 +9,13 @@ export function ReSelect({
   ...props
 }: ReSelectProps) {
   return (
-    <div className="relative md:w-fit w-full">
+    <div className="relative">
       <select
         id={id}
         value={value}
         className={`
           peer w-full text-md
-          px-2.5 pt-4 pb-2
+          px-2.5 pt-5 pb-2
           border-2 border-[#12a4e5]
           rounded-[5px]
           bg-transparent

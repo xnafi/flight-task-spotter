@@ -90,9 +90,9 @@ export function SearchBar() {
       </div>
 
       {/* Inputs */}
-      <div className="grid grid-cols-2 lg:flex lg:flex-wrap gap-4 w-full items-start">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-4 w-full items-start">
         {/* From */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col ">
           <ReInput
             id="from"
             label="From"
@@ -108,7 +108,7 @@ export function SearchBar() {
         </div>
 
         {/* To */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col ">
           <ReInput
             id="to"
             label="To"
@@ -124,7 +124,7 @@ export function SearchBar() {
         </div>
 
         {/* Departure */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col ">
           <ReInput
             id="date"
             type="date"
@@ -143,7 +143,7 @@ export function SearchBar() {
 
         {/* Return */}
         {tripType === "round" && (
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col ">
             <ReInput
               id="returnDate"
               type="date"
@@ -173,7 +173,7 @@ export function SearchBar() {
           label="Cabin"
           value={cabin}
           onChange={(e) => setCabin(e.target.value as CabinType)}
-          className="glass-input"
+          className="glass-input w-full md:w-fit"
           options={[
             { label: "Economy", value: "economy" },
             { label: "Premium Economy", value: "premium" },
@@ -186,6 +186,7 @@ export function SearchBar() {
         <ReSelect
           id="passengers"
           label="Passengers"
+          
           value={passengers}
           onChange={(e) => setPassengers(Number(e.target.value))}
           className="glass-input"
@@ -196,7 +197,7 @@ export function SearchBar() {
         />
 
         {/* CTA */}
-        <div className="min-w-40">
+        <div className="">
           <ReButton type="submit">Search</ReButton>
         </div>
       </div>

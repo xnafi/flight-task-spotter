@@ -12,7 +12,7 @@ export function ReInput({
   ...rest
 }: InputProps & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className="relative w-full lg:w-fit">
+    <div className="relative w-full">
       <input
         id={id}
         name={name ?? id}
