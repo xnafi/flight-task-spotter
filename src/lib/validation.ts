@@ -4,9 +4,9 @@ export const searchParamsSchema = z.object({
   from: z.string().min(1, "Departure city is required"),
   to: z.string().min(1, "Arrival city is required"),
   date: z.string().refine((date) => {
-    const selectedDate = new Date(date);
+    const selectedDate = new Date(date + "T00:00:00Z");
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setUTCHours(0, 0, 0, 0);
     return selectedDate >= today;
   }, "Departure date cannot be in the past"),
   trip: z.enum(["oneway", "round", "multi"]),
