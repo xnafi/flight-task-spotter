@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import { TripType } from "@/types/allTypes";
 
+// options
 const OPTIONS: { label: string; value: TripType }[] = [
   { label: "One Way", value: "oneway" },
   { label: "Round Trip", value: "round" },
-  { label: "Multi City", value: "multi" },
 ];
 
 interface TripTypeToggleProps {
@@ -16,11 +16,12 @@ export function TripTypeToggle({ value, onChange }: TripTypeToggleProps) {
   const activeIndex = OPTIONS.findIndex((o) => o.value === value);
 
   return (
-    <div className="relative inline-grid grid-cols-3 rounded-xl border border-indigo-500 p-1 w-full max-w-sm">
-      {/* Sliding indicator */}
+    // Changed grid-cols-3 to grid-cols-2
+    <div className="relative inline-grid grid-cols-2 rounded-xl border border-indigo-500 p-1 w-full max-w-sm">
+      {/* Sliding indicator - Updated width to 1/2 */}
       <div
-        className="absolute inset-y-1 left-1 w-[calc(100%/3)] rounded-lg bg-indigo-500 transition-transform duration-500 ease-[cubic-bezier(0.33,0.83,0.99,0.98)]"
-        style={{ transform: `translateX(${activeIndex * 100}%)` }}
+        className="absolute inset-y-1 left-1 w-[calc(100%/2)] rounded-lg bg-indigo-500 transition-transform duration-500 ease-[cubic-bezier(0.33,0.83,0.99,0.98)]"
+        style={{ transform: `translateX(${activeIndex * 95}%)` }}
       />
 
       {OPTIONS.map((opt) => (

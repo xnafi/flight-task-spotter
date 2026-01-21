@@ -4,7 +4,7 @@ import logo from "../../../public/assets/logo.png";
 
 const Navbar = () => {
   return (
-    <nav className="shadow-md w-full z-10 lg:h-15 mb-5">
+    <nav className="shadow-md w-full z-30 lg:h-15 md:mb-5 mb-0">
       <div className="container mx-auto h-25 py-0!">
         <div className="flex items-center justify-between py-4">
           <div className="shrink-0">
@@ -20,13 +20,13 @@ const Navbar = () => {
           </div>
           <div className="hidden lg:flex space-x-10 px-6">
             <Link
-              href="/home"
+              href=""
               className="para-text font-extrabold uppercase hover:transition-colors hover:text-indigo-500"
             >
               Login
             </Link>
             <Link
-              href="/service"
+              href=""
               className="para-text font-extrabold uppercase hover:transition-colors hover:text-indigo-500"
             >
               SignUp
@@ -63,8 +63,8 @@ const Navbar = () => {
             </label>
             <div
               className="peer-checked:transform peer-checked:translate-x-0 
-                         fixed top-0 left-0 w-64 h-full bg-black shadow-lg z-20
-                         transform -translate-x-full transition-transform duration-300 ease-in-out"
+                         fixed top-0 left-0 w-64 h-full bg-black shadow-lg
+                         transform -translate-x-full transition-transform duration-600 ease-in-out z-30"
             >
               <div className="p-4">
                 <div>
@@ -89,11 +89,9 @@ const Navbar = () => {
                     </svg>
                   </label>
                 </div>
-                <nav className="space-y-4">
-                  <Link href="/home" />
-                  <Link href="/service" />
-                  <Link href="/about" />
-                  <Link href="/result" />
+                <nav className="space-y-4 flex flex-col mt-8">
+                  <Link href="">Login</Link>
+                  <Link href="">Sign Up</Link>
                 </nav>
               </div>
             </div>

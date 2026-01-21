@@ -83,7 +83,7 @@ export function SearchBar() {
     <form
       onSubmit={onSubmit}
       className={clsx(
-        "sticky top-4 z-50 mx-auto rounded-2xl border border-white/20",
+        "sticky top-4 z-20 mx-auto rounded-2xl border border-white/20",
         "bg-white/10 backdrop-blur-xl shadow-[0_0_40px_rgba(99,102,241,0.35)] p-4",
       )}
     >

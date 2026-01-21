@@ -9,9 +9,10 @@ interface PageProps {
 }
 
 export default function SearchPage({ searchParams }: PageProps) {
-  // Next.js 15 requires unwrapping the searchParams Promise
+  // searchParams Promise
   const resolvedSearchParams = use(searchParams);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [params, setParams] = useState<any>(null);
   const [flights, setFlights] = useState<FlightOffer[]>([]);
   const [loading, setLoading] = useState(false);
