@@ -76,16 +76,13 @@ export function SearchBar() {
       params.append("return", returnDate);
     }
 
-    router.push(`/search?${params.toString()}`);
+    router.push(`/?${params.toString()}`);
   }
 
   return (
     <form
       onSubmit={onSubmit}
-      className={clsx(
-        "sticky top-4 z-20 mx-auto rounded-2xl border border-white/20",
-        "bg-white/10 backdrop-blur-xl shadow-[0_0_40px_rgba(99,102,241,0.35)] p-4",
-      )}
+      className={clsx("mx-auto rounded-2xl border border-white/20", "p-4")}
     >
       {/* Trip Type */}
       <div className="mb-4 flex justify-center md:justify-start">

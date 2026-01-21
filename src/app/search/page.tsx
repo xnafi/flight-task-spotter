@@ -87,10 +87,10 @@ export default function SearchPage({ searchParams }: PageProps) {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="mx-auto">
       {/* Search Summary */}
       {params && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="rounded-lg p-4 mb-6 ">
           <h1 className="text-3xl font-bold text-blue-900 mb-4">
             Flight Search Results
           </h1>

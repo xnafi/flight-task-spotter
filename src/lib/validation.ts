@@ -4,11 +4,17 @@ export const searchParamsSchema = z.object({
   from: z.string().min(1, "Departure city is required"),
   to: z.string().min(1, "Arrival city is required"),
   date: z.string().refine((dateStr) => {
-    const selectedDate = new Date(dateStr);
+    // Parse the date string as UTC to avoid timezone issues
+    const [year, month, day] = dateStr.split("-").map(Number);
+    const selectedDate = new Date(Date.UTC(year, month - 1, day));
+
+    // Get today in UTC
     const today = new Date();
-    // Reset time to midnight for a fair date comparison
-    today.setHours(0, 0, 0, 0);
-    return selectedDate >= today;
+    const todayUTC = new Date(
+      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()),
+    );
+
+    return selectedDate >= todayUTC;
   }, "Departure date cannot be in the past"),
   trip: z.enum(["oneway", "round", "multi"]),
   cabin: z.enum(["economy", "premium", "business", "first"]),
