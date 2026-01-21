@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { searchParamsSchema } from "@/lib/validation";
 import { FlightOffer, FlightSearchResponse } from "@/types/allTypes";
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SearchPage({ searchParams }: any) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [params, setParams] = useState<any>(null);
   const [flights, setFlights] = useState<FlightOffer[]>([]);
   const [loading, setLoading] = useState(false);

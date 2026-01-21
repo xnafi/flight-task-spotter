@@ -1,0 +1,93 @@
+.button {
+  font-family: inherit;
+  font-size: 20px;
+
+  background: #4169e1;
+  color: white;
+
+  padding: 0.5em 1em 0.5em 0.9em;
+  display: flex;
+  align-items: center;
+
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Disabled / loading */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Text */
+.text {
+  font-size: 16px;
+  display: block;
+  margin-left: 0.3em;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* SVG */
+.svgWrapper1 {
+  display: flex;
+  align-items: center;
+}
+
+.svgWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.button svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Hover animations (only when enabled) */
+.button:not(:disabled):hover .svgWrapper {
+  animation: fly 0.6s ease-in-out infinite alternate;
+}
+
+.button:not(:disabled):hover svg {
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+.button:not(:disabled):hover .text {
+  transform: translateX(10em);
+}
+
+/* Active */
+.button:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+/* Spinner */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Animations */
+@keyframes fly {
+  from {
+    transform: translateY(0.1em);
+  }
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

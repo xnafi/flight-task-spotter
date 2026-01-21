@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { ReInput } from "../re-ui/Re-Input";
 import { TripTypeToggle } from "@/components/TripTypeToggle";
 import { ReSelect } from "../re-ui/ReSelect";
+import ReButton from "../re-ui/Re-Button";
 
 interface FormErrors {
   from?: string;
@@ -199,15 +200,7 @@ export function SearchBar() {
 
         {/* CTA */}
         <div className="min-w-40">
-          <button
-            type="submit"
-            className={clsx(
-              "w-full rounded-md bg-linear-to-r bg-indigo-500",
-              "px-6 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.02]",
-            )}
-          >
-            Search Flights
-          </button>
+          <ReButton type="submit">Search</ReButton>
         </div>
       </div>
     </form>
