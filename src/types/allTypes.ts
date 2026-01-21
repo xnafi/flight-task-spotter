@@ -3,6 +3,16 @@ import { SelectHTMLAttributes } from "react";
 export type TripType = "oneway" | "round" | "multi";
 export type CabinType = "economy" | "premium" | "business" | "first";
 
+export interface SearchParams {
+  from: string;
+  to: string;
+  date: string;
+  trip: TripType;
+  cabin: CabinType;
+  p: number;
+  return?: string;
+}
+
 export interface InputProps {
   id: string;
   name?: string;

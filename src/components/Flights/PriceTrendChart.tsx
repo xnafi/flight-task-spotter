@@ -18,30 +18,21 @@ const priceData = [
   { day: "May 31", price: 760 },
 ];
 
-export default function PriceTrendChart() {
+export function PriceTrendChart() {
   return (
-    <div className="w-full h-40">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={priceData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
-          <XAxis dataKey="day" stroke="#a5b4fc" fontSize={12} tickMargin={10} />
-          <YAxis stroke="#a5b4fc" fontSize={12} />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: "#1e1b4b",
-              border: "none",
-              borderRadius: "8px",
-            }}
-          />
-          <Line
-            type="monotone"
-            dataKey="price"
-            stroke="#6366f1"
-            strokeWidth={3}
-            dot={{ r: 4 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="bg-indigo-900/60 rounded-xl p-4">
+      <h3 className="font-semibold mb-4">Price Trend (Next 7 Days)</h3>
+      <div className="h-40">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={priceData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="price" strokeWidth={3} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

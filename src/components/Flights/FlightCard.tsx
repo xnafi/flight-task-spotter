@@ -1,15 +1,15 @@
 import { FlightOffer } from "@/types/allTypes";
 
-export default function FlightCard({ flight }: { flight: FlightOffer }) {
+export function FlightCard({ flight }: { flight: FlightOffer }) {
   return (
-    <div className="bg-indigo-900/60 rounded-xl p-4 hover:bg-indigo-900/80 transition-all border border-white/5 group">
+    <div className="bg-indigo-900/60 rounded-xl p-4 hover:bg-indigo-900/80 transition-all border border-white/5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex-1 space-y-4">
           {flight.itineraries.map((itinerary, idx) => (
             <div key={idx} className="space-y-2">
               {itinerary.segments.map((segment, segIdx) => (
                 <div key={segIdx} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center font-bold text-xs uppercase">
+                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center font-bold text-xs">
                     {segment.carrierCode}
                   </div>
                   <div className="flex-1">
@@ -31,7 +31,7 @@ export default function FlightCard({ flight }: { flight: FlightOffer }) {
                         hour: "2-digit",
                         minute: "2-digit",
                       })}{" "}
-                      —
+                      —{" "}
                       {new Date(segment.arrival.at).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -44,17 +44,17 @@ export default function FlightCard({ flight }: { flight: FlightOffer }) {
           ))}
         </div>
 
-        <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 border-white/10 pt-4 sm:pt-0">
+        <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-white/10 pt-4 sm:pt-0">
           <div className="text-left sm:text-right">
             <p className="text-2xl font-black text-white">
               {flight.price.currency === "USD" ? "$" : flight.price.currency}
               {Math.round(Number(flight.price.grandTotal))}
             </p>
-            <p className="text-[10px] text-indigo-400 uppercase font-bold tracking-tighter">
+            <p className="text-[10px] text-indigo-400 uppercase font-bold">
               {flight.numberOfBookableSeats} seats left
             </p>
           </div>
-          <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold transition-all text-sm shadow-lg shadow-indigo-900/50">
+          <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-lg">
             Select
           </button>
         </div>
