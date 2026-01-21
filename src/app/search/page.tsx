@@ -19,7 +19,7 @@ export default function SearchPage({ searchParams }: any) {
         const validation = searchParamsSchema.safeParse(resolvedParams);
 
         if (!validation.success) {
-          const errors = validation.error.errors
+          const errors = validation.error.issues
             .map((err) => `${err.path.join(".")}: ${err.message}`)
             .join(", ");
           setError(`Invalid parameters: ${errors}`);
