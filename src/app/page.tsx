@@ -96,7 +96,11 @@ export default function FlightSearchPage() {
           <FiltersSidebar show={showFilters} />
 
           <div className="col-span-3 space-y-4">
-            {params && <SearchSummary params={params} />}
+            {params && (
+              <>
+                <PriceTrendChart /> <SearchSummary params={params} />
+              </>
+            )}
 
             {loading && <LoadingUi />}
             {error && <ErrorMessage message={error} />}
@@ -114,12 +118,10 @@ export default function FlightSearchPage() {
 
             {!loading && !error && flights.length === 0 && (
               <div className="space-y-4">
-                {params && <PriceTrendChart />}
+                {!params && <PriceTrendChart />}
 
                 {params ? (
                   <>
-                    {" "}
-                    <PriceTrendChart />
                     <div className="text-center py-20 text-indigo-300 bg-indigo-900/20 rounded-xl border border-dashed border-white/10">
                       <p className="text-lg font-medium">No flights found</p>
                       <p className="text-sm">
