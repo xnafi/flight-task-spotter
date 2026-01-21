@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { searchParamsSchema } from "@/lib/validation";
 import { FlightOffer, FlightSearchResponse } from "@/types/allTypes";
-import LoadingUi from "@/components/shared/LoadingUi";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SearchPage({ searchParams }: any) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [params, setParams] = useState<any>(null);
   const [flights, setFlights] = useState<FlightOffer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,10 +17,7 @@ export default function SearchPage({ searchParams }: any) {
         const validation = searchParamsSchema.safeParse(resolvedParams);
 
         if (!validation.success) {
-          const errors = validation.error.issues
-            .map((err) => `${err.path.join(".")}: ${err.message}`)
-            .join(", ");
-          setError(`Invalid parameters: ${errors}`);
+          setError("Invalid search parameters");
           setParams(null);
           return;
         }
@@ -114,8 +109,11 @@ export default function SearchPage({ searchParams }: any) {
 
       {/* Loading State */}
       {loading && (
-        <div className="text-center py-12 flex justify-center items-center">
-          <LoadingUi />
+        <div className="text-center py-12">
+          <p className="text-lg text-gray-600">Loading flights...</p>
+          <div className="mt-4 flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          </div>
         </div>
       )}
 
