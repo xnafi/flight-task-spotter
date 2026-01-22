@@ -14,6 +14,15 @@ export async function getAccessToken() {
   }
 
   try {
+    const apiKey = process.env.AMADEUS_API_KEY;
+    const apiSecret = process.env.AMADEUS_API_SECRET;
+
+    if (!apiKey || !apiSecret) {
+      throw new Error(
+        "Amadeus API credentials not configured. Using mock data.",
+      );
+    }
+
     const res = await fetch(TOKEN_URL, {
       method: "POST",
       headers: {
@@ -21,14 +30,13 @@ export async function getAccessToken() {
       },
       body: new URLSearchParams({
         grant_type: "client_credentials",
-        client_id: process.env.AMADEUS_API_KEY!,
-        client_secret: process.env.AMADEUS_API_SECRET!,
+        client_id: apiKey,
+        client_secret: apiSecret,
       }),
     });
 
     if (!res.ok) {
       const error = await res.text();
-      console.error("Token Error Response:", error);
       throw new Error(`Failed to get access token: ${res.status}`);
     }
 
@@ -45,7 +53,6 @@ export async function getAccessToken() {
 
     return data.access_token;
   } catch (error) {
-    console.error("Token Error:", error);
     throw error;
   }
 }

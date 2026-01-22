@@ -1,20 +1,33 @@
 import { FlightOffer } from "@/types/allTypes";
 
+
 export function FlightCard({ flight }: { flight: FlightOffer }) {
+  const totalStops = flight.itineraries.reduce(
+    (acc, it) => acc + (it.segments.length - 1),
+    0,
+  );
+
   return (
-    <div className="bg-indigo-900/60 rounded-xl p-4 hover:bg-indigo-900/80 transition-all border border-white/5">
+    <div className="rounded-xl p-4 transition-all border border-[#12a4e5]">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex-1 space-y-4">
           {flight.itineraries.map((itinerary, idx) => (
             <div key={idx} className="space-y-2">
               {itinerary.segments.map((segment, segIdx) => (
                 <div key={segIdx} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center font-bold text-xs">
-                    {segment.carrierCode}
+                  <div className="w-12 h-12 rounded-lg bg-indigo-600/40 flex items-center justify-center font-bold text-xs border border-indigo-400/50 flex-shrink-0">
+                    <div className="text-center">
+                      <p className="text-xs font-bold text-indigo-200">
+                        {segment.carrierCode}
+                      </p>
+                      <p className="text-[10px] text-indigo-300">
+                        {segment.number}
+                      </p>
+                    </div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between max-w-xs">
-                      <p className="text-lg font-bold">
+                      <p className="text-lg font-bold text-white">
                         {segment.departure.iataCode}
                       </p>
                       <div className="flex-1 border-t border-dashed border-white/20 mx-4 relative">
@@ -22,7 +35,7 @@ export function FlightCard({ flight }: { flight: FlightOffer }) {
                           {segment.duration.replace("PT", "").toLowerCase()}
                         </span>
                       </div>
-                      <p className="text-lg font-bold">
+                      <p className="text-lg font-bold text-white">
                         {segment.arrival.iataCode}
                       </p>
                     </div>
@@ -44,15 +57,21 @@ export function FlightCard({ flight }: { flight: FlightOffer }) {
           ))}
         </div>
 
-        <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-white/10 pt-4 sm:pt-0">
+        <div className="flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 border-white/10 pt-4 sm:pt-0 gap-4">
           <div className="text-left sm:text-right">
             <p className="text-2xl font-black text-white">
               {flight.price.currency === "USD" ? "$" : flight.price.currency}
               {Math.round(Number(flight.price.grandTotal))}
             </p>
-            <p className="text-[10px] text-indigo-400 uppercase font-bold">
-              {flight.numberOfBookableSeats} seats left
-            </p>
+            <div className="flex gap-2 text-[10px] text-indigo-400 uppercase font-bold mt-1">
+              <span>
+                {totalStops === 0
+                  ? "✈️ Non-stop"
+                  : `${totalStops} Stop${totalStops > 1 ? "s" : ""}`}
+              </span>
+              <span>•</span>
+              <span>{flight.numberOfBookableSeats} seats</span>
+            </div>
           </div>
           <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-lg">
             Select
