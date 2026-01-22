@@ -102,7 +102,11 @@ export default function FlightSearchPage() {
               </>
             )}
 
-            {loading && <LoadingUi />}
+            {loading && (
+              <div className="flex justify-center items-center">
+                <LoadingUi />
+              </div>
+            )}
             {error && <ErrorMessage message={error} />}
 
             {!loading && !error && flights.length > 0 && (

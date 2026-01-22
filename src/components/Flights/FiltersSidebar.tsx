@@ -16,7 +16,7 @@ export function FiltersSidebar({ show }: { show: boolean }) {
 
   return (
     <aside
-      className={`${show ? "block" : "hidden"} md:block col-span-1 space-y-5 rounded-2xl border border-[#12a4e5] p-4 bg-indigo-900/40 md:bg-transparent`}
+      className={`${show ? "block" : "hidden"} md:block col-span-1 space-y-5 rounded-2xl border border-[#12a4e5] p-4 bg-indigo-900/40 md:bg-transparent h-fit`}
     >
       <h3 className="font-semibold hidden md:block">Filters</h3>
 

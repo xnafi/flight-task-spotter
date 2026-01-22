@@ -15,7 +15,7 @@ export function FlightCard({ flight }: { flight: FlightOffer }) {
             <div key={idx} className="space-y-2">
               {itinerary.segments.map((segment, segIdx) => (
                 <div key={segIdx} className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-indigo-600/40 flex items-center justify-center font-bold text-xs border border-indigo-400/50 flex-shrink-0">
+                  <div className="w-12 h-12 rounded-lg bg-indigo-500 flex items-center justify-center font-bold text-xs border border-indigo-400/50 shrink-0">
                     <div className="text-center">
                       <p className="text-xs font-bold text-indigo-200">
                         {segment.carrierCode}
@@ -73,7 +73,7 @@ export function FlightCard({ flight }: { flight: FlightOffer }) {
               <span>{flight.numberOfBookableSeats} seats</span>
             </div>
           </div>
-          <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-lg">
+          <button className="bg-indigo-500 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-lg">
             Select
           </button>
         </div>
