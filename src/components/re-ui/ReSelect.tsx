@@ -20,6 +20,7 @@ export function ReSelect({
           rounded-[5px]
           bg-transparent
           focus:outline-none
+          cursor-pointer
           ${className}
         `}
         {...props}

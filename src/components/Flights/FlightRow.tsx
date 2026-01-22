@@ -7,19 +7,28 @@ interface FlightRowProps {
 
 export function FlightRow({ airline, time, details, price }: FlightRowProps) {
   return (
-    <div className="border border-[#12a4e5] rounded-xl p-4 flex items-center justify-between hover:border-white/20">
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[10px] font-bold">
-          {airline[0]}
+    <div className="rounded-xl p-4 transition-all border border-[#12a4e5] hover:border-white/20">
+      <div className="flex items-center justify-between gap-4">
+        {/* Airline / Time */}
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center font-bold text-xs border border-indigo-400/50 shrink-0">
+            <span className="text-indigo-200">
+              {airline.slice(0, 2).toUpperCase()}
+            </span>
+          </div>
+          <div>
+            <p className="text-sm font-bold text-white">{airline}</p>
+            <p className="text-xs text-indigo-300">{time}</p>
+          </div>
         </div>
-        <div>
-          <p className="text-sm font-bold">{airline}</p>
-          <p className="text-xs text-indigo-300">{time}</p>
+
+        {/* Price / Details */}
+        <div className="text-right">
+          <p className="text-lg font-black text-white">{price}</p>
+          <p className="text-[10px] uppercase font-bold text-indigo-400">
+            {details}
+          </p>
         </div>
-      </div>
-      <div className="text-right">
-        <p className="text-base font-bold text-indigo-200">{price}</p>
-        <p className="text-[10px] text-indigo-400">{details}</p>
       </div>
     </div>
   );

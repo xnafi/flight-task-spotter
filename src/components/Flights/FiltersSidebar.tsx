@@ -241,7 +241,7 @@ export function FiltersSidebar({
       {/* Reset */}
       <button
         onClick={handleReset}
-        className="w-full py-2 text-sm text-indigo-300 hover:text-white underline underline-offset-4"
+        className="w-full py-2 text-sm text-indigo-300 hover:text-white underline underline-offset-4 cursor-pointer"
       >
         Reset all filters
       </button>

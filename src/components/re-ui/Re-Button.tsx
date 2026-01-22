@@ -22,7 +22,7 @@ export default function SendButton({
       type={type}
       onClick={onClick}
       disabled={isDisabled}
-      className={styles.button}
+      className={`${styles.button} cursor-pointer`}
       aria-busy={loading}
     >
       <div className={styles.svgWrapper1}>
