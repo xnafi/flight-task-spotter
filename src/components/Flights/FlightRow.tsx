@@ -7,7 +7,7 @@ interface FlightRowProps {
 
 export function FlightRow({ airline, time, details, price }: FlightRowProps) {
   return (
-    <div className="bg-indigo-900/40 rounded-xl p-4 flex items-center justify-between border border-white/5 hover:border-white/20">
+    <div className="border border-[#12a4e5] rounded-xl p-4 flex items-center justify-between hover:border-white/20">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[10px] font-bold">
           {airline[0]}

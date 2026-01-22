@@ -80,7 +80,7 @@ export default function FlightSearchPage() {
 
   return (
     <div className="min-h-screen md:mt-10">
-      <div className="mx-auto bg-indigo-950/50 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden space-y-6">
+      <div className="mx-auto backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden space-y-6">
         <SearchBar />
 
         <div className="md:hidden px-6">
