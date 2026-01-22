@@ -96,7 +96,7 @@ export default function FlightSearchPage() {
         <div className="md:hidden px-6">
           <button
             onClick={() => setShowFilters((v) => !v)}
-            className="w-full py-2 bg-indigo-800 rounded-lg text-sm font-medium border border-white/10"
+            className="w-full py-2 bg-indigo-500 rounded-lg text-sm font-medium border border-white/10"
           >
             {showFilters ? "Hide Filters" : "Show Filters & Sorting"}
           </button>

@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <nav className="shadow-md w-full z-30 lg:h-15 md:mb-5 mb-0">
       <div className="container mx-auto h-25 py-0!">
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between pb-4">
           <div className="shrink-0">
             <Link href="/">
               <Image
@@ -21,13 +21,13 @@ const Navbar = () => {
           <div className="hidden lg:flex space-x-10 px-6">
             <Link
               href=""
-              className="para-text font-extrabold uppercase hover:transition-colors hover:text-indigo-500"
+              className="text-sm font-extrabold uppercase hover:transition-colors hover:text-indigo-500"
             >
               Login
             </Link>
             <Link
               href=""
-              className="para-text font-extrabold uppercase hover:transition-colors hover:text-indigo-500"
+              className="text-sm font-extrabold uppercase hover:transition-colors hover:text-indigo-500"
             >
               SignUp
             </Link>
@@ -43,7 +43,7 @@ const Navbar = () => {
             />
             <label
               htmlFor="menu-toggle"
-              className="para-text font-extrabold uppercase hover:transition-all focus:outline-none peer-checked:text-indigo-500"
+              className="text-sm font-extrabold uppercase hover:transition-all focus:outline-none peer-checked:text-indigo-500"
               aria-label="Toggle Menu"
             >
               <svg
@@ -70,7 +70,7 @@ const Navbar = () => {
                 <div>
                   <label
                     htmlFor="menu-toggle"
-                    className="para-text font-extrabold uppercase hover:transition-all focus:outline-none mb-4 flex justify-end "
+                    className="text-sm font-extrabold uppercase hover:transition-all focus:outline-none mb-4 flex justify-end "
                     aria-label="Close Menu"
                   >
                     <svg

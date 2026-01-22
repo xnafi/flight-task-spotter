@@ -82,7 +82,7 @@ export function SearchBar() {
   return (
     <form
       onSubmit={onSubmit}
-      className={clsx("mx-auto rounded-2xl border border-white/20", "p-4")}
+      className={clsx("mx-auto rounded-2xl border border-[#12a4e5]", "p-4")}
     >
       {/* Trip Type */}
       <div className="mb-4 flex justify-center md:justify-start">
