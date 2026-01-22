@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState, use, useCallback } from "react";
 import { searchParamsSchema } from "@/lib/validation";
 import { FlightOffer, FlightSearchResponse } from "@/types/allTypes";
+import { FiltersSidebar } from "@/components/Flights/FiltersSidebar";
+import { FlightCard } from "@/components/Flights/FlightCard";
+import { PriceTrendChart } from "@/components/Flights/PriceTrendChart";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -15,8 +18,15 @@ export default function SearchPage({ searchParams }: PageProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [params, setParams] = useState<any>(null);
   const [flights, setFlights] = useState<FlightOffer[]>([]);
+  const [filteredFlights, setFilteredFlights] = useState<FlightOffer[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Memoize the filter callback
+  const handleFilteredFlights = useCallback((filtered: FlightOffer[]) => {
+    setFilteredFlights(filtered);
+  }, []);
 
   useEffect(() => {
     async function parseAndFetch() {
@@ -63,7 +73,9 @@ export default function SearchPage({ searchParams }: PageProps) {
         }
 
         const result: FlightSearchResponse = await response.json();
-        setFlights(result.data || []);
+        const flightData = result.data || [];
+        setFlights(flightData);
+        setFilteredFlights(flightData);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
@@ -141,38 +153,62 @@ export default function SearchPage({ searchParams }: PageProps) {
         </div>
       )}
 
-      {/* Flights List */}
-      {!loading && !error && flights.length > 0 && (
-        <div className="space-y-4">
-          <p className="text-lg font-semibold text-gray-700">
-            Found {flights.length} flight offers
-          </p>
-          {flights.map((flight) => (
-            <div
-              key={flight.id}
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-            >
-              {/* Flight UI Logic remains the same... */}
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {flight.price.currency} {flight.price.grandTotal}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {flight.numberOfBookableSeats} seats left
-                  </p>
-                </div>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded">
-                  Select
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Main Content Grid */}
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          {/* Sidebar */}
+          <div className="md:col-span-1">
+            <FiltersSidebar
+              show={showFilters}
+              flights={flights}
+              onFilter={handleFilteredFlights}
+            />
+          </div>
 
-      {!loading && !error && flights.length === 0 && params && (
-        <div className="text-center py-12 text-gray-500">No flights found.</div>
+          {/* Content */}
+          <div className="md:col-span-3 space-y-6">
+            {/* Price Trend Chart */}
+            {params && (
+              <PriceTrendChart
+                origin={params.from}
+                destination={params.to}
+                departureDate={params.date}
+              />
+            )}
+
+            {/* Flights List */}
+            {filteredFlights.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-lg font-semibold text-gray-200">
+                    Found {filteredFlights.length} flight
+                    {filteredFlights.length !== 1 ? "s" : ""}
+                  </p>
+                  {filteredFlights.length < flights.length && (
+                    <p className="text-sm text-indigo-300">
+                      ({flights.length - filteredFlights.length} filtered out)
+                    </p>
+                  )}
+                </div>
+                {filteredFlights.map((flight) => (
+                  <FlightCard key={flight.id} flight={flight} />
+                ))}
+              </div>
+            )}
+
+            {filteredFlights.length === 0 && flights.length > 0 && (
+              <div className="text-center py-12 text-gray-400">
+                No flights match your filters. Try adjusting them.
+              </div>
+            )}
+
+            {filteredFlights.length === 0 && flights.length === 0 && params && (
+              <div className="text-center py-12 text-gray-400">
+                No flights found.
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

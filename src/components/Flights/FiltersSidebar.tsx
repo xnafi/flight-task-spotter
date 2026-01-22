@@ -1,18 +1,142 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ReSelect } from "../re-ui/ReSelect";
+import { FlightOffer } from "@/types/allTypes";
 
-export function FiltersSidebar({ show }: { show: boolean }) {
+interface FiltersSidebarProps {
+  show: boolean;
+  flights?: FlightOffer[];
+  onFilter?: (filtered: FlightOffer[]) => void;
+}
+
+export function FiltersSidebar({
+  show,
+  flights = [],
+  onFilter = () => {},
+}: FiltersSidebarProps) {
   const [stops, setStops] = useState("");
   const [airline, setAirline] = useState("");
-  const [airport, setAirport] = useState("");
-  const [cabin, setCabin] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [departureTime, setDepartureTime] = useState("");
   const [maxDuration, setMaxDuration] = useState("");
-  const [refundable, setRefundable] = useState("");
   const [maxPrice, setMaxPrice] = useState(1200);
+
+  // Memoize the filter callback to prevent infinite loops
+  const handleFilter = useCallback(
+    (filtered: FlightOffer[]) => {
+      onFilter(filtered);
+    },
+    [onFilter],
+  );
+
+  // Apply filters whenever filters or flights change
+  useEffect(() => {
+    if (!flights || flights.length === 0) {
+      handleFilter([]);
+      return;
+    }
+
+    let filtered = [...flights];
+
+    // Filter by stops
+    if (stops) {
+      filtered = filtered.filter((flight) => {
+        const totalStops = flight.itineraries.reduce(
+          (acc, it) => acc + (it.segments.length - 1),
+          0,
+        );
+        if (stops === "0") return totalStops === 0;
+        if (stops === "1") return totalStops === 1;
+        if (stops === "2+") return totalStops >= 2;
+        return true;
+      });
+    }
+
+    // Filter by airline
+    if (airline) {
+      filtered = filtered.filter((flight) =>
+        flight.itineraries.some((it) =>
+          it.segments.some((seg) => seg.carrierCode === airline),
+        ),
+      );
+    }
+
+    // Filter by departure time window
+    if (departureTime) {
+      const [startHour, endHour] = departureTime.split("-").map(Number);
+      filtered = filtered.filter((flight) =>
+        flight.itineraries.some((it) =>
+          it.segments.some((seg) => {
+            const hour = new Date(seg.departure.at).getHours();
+            return hour >= startHour && hour < endHour;
+          }),
+        ),
+      );
+    }
+
+    // Filter by max duration
+    if (maxDuration) {
+      const maxHours = Number(maxDuration);
+      filtered = filtered.filter((flight) =>
+        flight.itineraries.every((it) => {
+          const durationMatch = it.duration.match(/(\d+)H/);
+          const hours = durationMatch ? Number(durationMatch[1]) : 0;
+          return hours <= maxHours;
+        }),
+      );
+    }
+
+    // Filter by max price
+    filtered = filtered.filter(
+      (flight) => Number(flight.price.grandTotal) <= maxPrice,
+    );
+
+    // Sort
+    if (sortBy === "price") {
+      filtered.sort(
+        (a, b) => Number(a.price.grandTotal) - Number(b.price.grandTotal),
+      );
+    } else if (sortBy === "duration") {
+      filtered.sort((a, b) => {
+        const aDuration = a.itineraries[0]?.duration || "PT0H";
+        const bDuration = b.itineraries[0]?.duration || "PT0H";
+        const aHours = Number(aDuration.match(/(\d+)H/)?.[1]) || 0;
+        const bHours = Number(bDuration.match(/(\d+)H/)?.[1]) || 0;
+        return aHours - bHours;
+      });
+    } else if (sortBy === "departure") {
+      filtered.sort((a, b) => {
+        const aTime = new Date(
+          a.itineraries[0]?.segments[0]?.departure.at || 0,
+        ).getTime();
+        const bTime = new Date(
+          b.itineraries[0]?.segments[0]?.departure.at || 0,
+        ).getTime();
+        return aTime - bTime;
+      });
+    }
+
+    handleFilter(filtered);
+  }, [
+    stops,
+    airline,
+    departureTime,
+    maxDuration,
+    maxPrice,
+    sortBy,
+    flights,
+    handleFilter,
+  ]);
+
+  const handleReset = () => {
+    setStops("");
+    setAirline("");
+    setSortBy("");
+    setDepartureTime("");
+    setMaxDuration("");
+    setMaxPrice(1200);
+  };
 
   return (
     <aside
@@ -50,35 +174,6 @@ export function FiltersSidebar({ show }: { show: boolean }) {
         ]}
       />
 
-      {/* Departure Airport */}
-      <ReSelect
-        id="airport"
-        label="Departure Airport"
-        value={airport}
-        onChange={(e) => setAirport(e.target.value)}
-        options={[
-          { label: "Any", value: "" },
-          { label: "JFK", value: "JFK" },
-          { label: "LGA", value: "LGA" },
-          { label: "EWR", value: "EWR" },
-        ]}
-      />
-
-      {/* Cabin (maps to traveler.pricingOptionFareType / class) */}
-      <ReSelect
-        id="cabin"
-        label="Cabin Class"
-        value={cabin}
-        onChange={(e) => setCabin(e.target.value)}
-        options={[
-          { label: "Any", value: "" },
-          { label: "Economy", value: "ECONOMY" },
-          { label: "Premium Economy", value: "PREMIUM_ECONOMY" },
-          { label: "Business", value: "BUSINESS" },
-          { label: "First", value: "FIRST" },
-        ]}
-      />
-
       {/* Departure Time Window */}
       <ReSelect
         id="departureTime"
@@ -106,18 +201,6 @@ export function FiltersSidebar({ show }: { show: boolean }) {
           { label: "≤ 6 hours", value: "6" },
           { label: "≤ 8 hours", value: "8" },
           { label: "≤ 12 hours", value: "12" },
-        ]}
-      />
-
-      {/* Refundable */}
-      <ReSelect
-        id="refundable"
-        label="Refundable"
-        value={refundable}
-        onChange={(e) => setRefundable(e.target.value)}
-        options={[
-          { label: "Any", value: "" },
-          { label: "Refundable Only", value: "true" },
         ]}
       />
 
@@ -157,17 +240,7 @@ export function FiltersSidebar({ show }: { show: boolean }) {
 
       {/* Reset */}
       <button
-        onClick={() => {
-          setStops("");
-          setAirline("");
-          setAirport("");
-          setCabin("");
-          setSortBy("");
-          setDepartureTime("");
-          setMaxDuration("");
-          setRefundable("");
-          setMaxPrice(1200);
-        }}
+        onClick={handleReset}
         className="w-full py-2 text-sm text-indigo-300 hover:text-white underline underline-offset-4"
       >
         Reset all filters

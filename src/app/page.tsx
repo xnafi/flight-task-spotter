@@ -1,15 +1,9 @@
 "use client";
 
-import { SearchBar } from "@/components/Search/SearchBar";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { searchParamsSchema } from "@/lib/validation";
-import {
-  FlightOffer,
-  FlightSearchResponse,
-  SearchParams,
-} from "@/types/allTypes";
+import { useSearchParams } from "next/navigation";
 
+import { SearchBar } from "@/components/Search/SearchBar";
 import LoadingUi from "@/components/shared/LoadingUi";
 import { FiltersSidebar } from "@/components/Flights/FiltersSidebar";
 import { ErrorMessage } from "@/components/Flights/ErrorMessage";
@@ -18,21 +12,33 @@ import { FlightCard } from "@/components/Flights/FlightCard";
 import { PriceTrendChart } from "@/components/Flights/PriceTrendChart";
 import { FlightRow } from "@/components/Flights/FlightRow";
 
+import { searchParamsSchema } from "@/lib/validation";
+import {
+  FlightOffer,
+  FlightSearchResponse,
+  SearchParams,
+} from "@/types/allTypes";
+
 export default function FlightSearchPage() {
   const searchParams = useSearchParams();
   const hasSearchParams = searchParams && searchParams.size > 0;
 
   const [params, setParams] = useState<SearchParams | null>(null);
   const [flights, setFlights] = useState<FlightOffer[]>([]);
+  const [filteredFlights, setFilteredFlights] = useState<FlightOffer[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
+  /**
+   * Fetch flights when search params change
+   */
   useEffect(() => {
     if (!hasSearchParams || !searchParams) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setParams(null);
       setFlights([]);
+      setFilteredFlights([]);
       return;
     }
 
@@ -69,11 +75,14 @@ export default function FlightSearchPage() {
         return res.json();
       })
       .then((result: FlightSearchResponse) => {
-        setFlights(result.data || []);
+        const data = result.data || [];
+        setFlights(data);
+        setFilteredFlights(data); // baseline for filters
       })
       .catch((err) => {
         setError(err.message);
         setFlights([]);
+        setFilteredFlights([]);
       })
       .finally(() => setLoading(false));
   }, [searchParams, hasSearchParams]);
@@ -83,9 +92,10 @@ export default function FlightSearchPage() {
       <div className="mx-auto backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden space-y-6">
         <SearchBar />
 
+        {/* Mobile filter toggle */}
         <div className="md:hidden px-6">
           <button
-            onClick={() => setShowFilters(!showFilters)}
+            onClick={() => setShowFilters((v) => !v)}
             className="w-full py-2 bg-indigo-800 rounded-lg text-sm font-medium border border-white/10"
           >
             {showFilters ? "Hide Filters" : "Show Filters & Sorting"}
@@ -93,12 +103,19 @@ export default function FlightSearchPage() {
         </div>
 
         <div className="flex flex-col md:grid md:grid-cols-4 gap-6">
-          <FiltersSidebar show={showFilters} />
+          {/* Filters */}
+          <FiltersSidebar
+            show={showFilters}
+            flights={flights}
+            onFilter={setFilteredFlights}
+          />
 
+          {/* Results */}
           <div className="col-span-3 space-y-4">
             {params && (
               <>
-                <PriceTrendChart /> <SearchSummary params={params} />
+                <PriceTrendChart />
+                <SearchSummary params={params} />
               </>
             )}
 
@@ -107,32 +124,32 @@ export default function FlightSearchPage() {
                 <LoadingUi />
               </div>
             )}
+
             {error && <ErrorMessage message={error} />}
 
-            {!loading && !error && flights.length > 0 && (
+            {!loading && !error && filteredFlights.length > 0 && (
               <div className="space-y-3">
                 <p className="text-sm font-medium text-indigo-300">
-                  Found {flights.length} results
+                  Found {filteredFlights.length} results
                 </p>
-                {flights.map((flight) => (
+
+                {filteredFlights.map((flight) => (
                   <FlightCard key={flight.id} flight={flight} />
                 ))}
               </div>
             )}
 
-            {!loading && !error && flights.length === 0 && (
+            {!loading && !error && filteredFlights.length === 0 && (
               <div className="space-y-4">
                 {!params && <PriceTrendChart />}
 
                 {params ? (
-                  <>
-                    <div className="text-center py-20 text-indigo-300 bg-indigo-900/20 rounded-xl border border-dashed border-white/10">
-                      <p className="text-lg font-medium">No flights found</p>
-                      <p className="text-sm">
-                        Try adjusting your filters or dates
-                      </p>
-                    </div>
-                  </>
+                  <div className="text-center py-20 text-indigo-300 bg-indigo-900/20 rounded-xl border border-dashed border-white/10">
+                    <p className="text-lg font-medium">No flights found</p>
+                    <p className="text-sm">
+                      Try adjusting your filters or dates
+                    </p>
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     <h3 className="font-medium text-indigo-200 px-1">
