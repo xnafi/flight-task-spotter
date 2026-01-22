@@ -140,7 +140,7 @@ export function FiltersSidebar({
 
   return (
     <aside
-      className={`${show ? "block" : "hidden"} md:block col-span-1 space-y-5 rounded-2xl border border-[#12a4e5] p-4 bg-[#12a4e5] md:bg-transparent h-fit`}
+      className={`${show ? "block" : "hidden"} md:block col-span-1 space-y-5 rounded-2xl border border-[#12a4e5] p-4 md:bg-transparent h-fit`}
     >
       <h3 className="font-semibold hidden md:block">Filters</h3>
 

@@ -14,7 +14,7 @@ const Navbar = () => {
                 width={200}
                 height={100}
                 alt="logo"
-                className="w-40 lg:w-40 border-white border rounded-xl"
+                className="w-40 lg:w-40 rounded-xl"
               />
             </Link>
           </div>
