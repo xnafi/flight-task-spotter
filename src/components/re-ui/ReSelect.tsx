@@ -36,7 +36,7 @@ export function ReSelect({
 
       <label
         htmlFor={id}
-        className="absolute left-1.75 px-2 text-sm font-semibold rounded-sm text-white bg-[#12a4e5] transition-all pointer-events-none top-1/2 -translate-y-1/2 peer-focus:-top-1.5 peer-focus:translate-y-0 peer-not-placeholder-shown:-top-1.5 peer-not-placeholder-shown:translate-y-0"
+        className="absolute left-1.75 px-2 text-sm font-semibold rounded-sm text-white bg-indigo-500 transition-all pointer-events-none top-1/2 -translate-y-1/2 peer-focus:-top-1.5 peer-focus:translate-y-0 peer-not-placeholder-shown:-top-1.5 peer-not-placeholder-shown:translate-y-0"
       >
         {label}
       </label>

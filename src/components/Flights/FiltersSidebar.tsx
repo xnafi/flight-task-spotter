@@ -223,7 +223,15 @@ export function FiltersSidebar({
         <p className="text-sm font-medium text-indigo-200">
           Max Price (${maxPrice})
         </p>
+        <label
+          htmlFor="maxPrice"
+          className="block text-sm font-medium text-indigo-200"
+        >
+          Max Price: ${maxPrice}
+        </label>
+
         <input
+          id="maxPrice"
           type="range"
           className="w-full accent-indigo-500"
           min={100}
@@ -231,6 +239,10 @@ export function FiltersSidebar({
           step={50}
           value={maxPrice}
           onChange={(e) => setMaxPrice(Number(e.target.value))}
+          aria-valuemin={100}
+          aria-valuemax={2000}
+          aria-valuenow={maxPrice}
+          aria-valuetext={`Maximum price ${maxPrice} dollars`}
         />
         <div className="flex justify-between text-xs text-indigo-300">
           <span>$100</span>

@@ -113,15 +113,7 @@ export async function getFlights({
   adults?: number;
 }) {
   try {
-    console.log("Fetching flights with params:", {
-      origin,
-      destination,
-      date,
-      adults,
-    });
-
     const token = await getAccessToken();
-    console.log("Token obtained successfully");
 
     const url =
       `${FLIGHT_URL}?originLocationCode=${origin}` +
@@ -131,39 +123,21 @@ export async function getFlights({
       `&currencyCode=USD` +
       `&max=50`;
 
-    console.log("Amadeus API URL:", url);
-
     const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      next: { revalidate: 60 }, // caching for demo
+      next: { revalidate: 60 },
     });
 
-    console.log("Response status:", res.status);
-
     if (!res.ok) {
-      const errorData = await res.text();
-      console.error("Amadeus API Error:", errorData);
-
-      // If API fails, use mock data for demo
-      console.warn("Using mock data due to API error");
       const mockFlights = generateMockFlights(origin, destination, date);
       return { data: mockFlights };
     }
 
     const jsonData = await res.json();
-    console.log(
-      "Flights fetched successfully:",
-      jsonData.data?.length || 0,
-      "offers",
-    );
     return jsonData;
-  } catch (error) {
-    console.error("Error fetching flights:", error);
-
-    // Fallback to mock data
-    console.warn("Using mock data as fallback");
+  } catch {
     const mockFlights = generateMockFlights(origin, destination, date);
     return { data: mockFlights };
   }
