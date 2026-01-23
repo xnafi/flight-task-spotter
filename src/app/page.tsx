@@ -9,10 +9,11 @@ import { FiltersSidebar } from "@/components/Flights/FiltersSidebar";
 import { ErrorMessage } from "@/components/Flights/ErrorMessage";
 import { SearchSummary } from "@/components/Flights/SearchSummary";
 import { FlightCard } from "@/components/Flights/FlightCard";
-
 import { FlightRow } from "@/components/Flights/FlightRow";
 
+import { popularFlights } from "@/lib/popularFlights";
 import { searchParamsSchema } from "@/lib/validation";
+
 import {
   FlightOffer,
   FlightSearchResponse,
@@ -85,6 +86,12 @@ export default function FlightSearchPage() {
       .finally(() => setLoading(false));
   }, [searchParams, hasSearchParams]);
 
+  /** 🔑 Graph data source */
+  const graphFlights =
+    params && filteredFlights.length > 0 ? filteredFlights : popularFlights;
+
+  const graphTitle = params ? "Search Price Trend" : "Popular Flight Prices";
+
   return (
     <div className="min-h-screen md:mt-10">
       <div className="mx-auto backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden space-y-6">
@@ -110,13 +117,10 @@ export default function FlightSearchPage() {
 
           {/* Results */}
           <div className="col-span-3 space-y-4">
-            {params && (
-              <>
-                {/* LIVE GRAPH */}
-                <PriceTrendChart flights={filteredFlights} />
-                <SearchSummary params={params} />
-              </>
-            )}
+            {/* ALWAYS VISIBLE GRAPH */}
+            <PriceTrendChart flights={graphFlights} title={graphTitle} />
+
+            {params && <SearchSummary params={params} />}
 
             {loading && (
               <div className="flex justify-center items-center">
@@ -138,34 +142,30 @@ export default function FlightSearchPage() {
               </div>
             )}
 
-            {!loading && !error && filteredFlights.length === 0 && (
-              <div className="space-y-4">
-                {params ? (
-                  <div className="text-center py-20 text-indigo-300 bg-indigo-900/20 rounded-xl border border-dashed border-white/10">
-                    <p className="text-lg font-medium">No flights found</p>
-                    <p className="text-sm">
-                      Try adjusting your filters or dates
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <h3 className="font-medium text-indigo-200 px-1">
-                      Popular Offers
-                    </h3>
-                    <FlightRow
-                      airline="Delta"
-                      time="08:00 — 11:10"
-                      details="Nonstop · 3h 10m"
-                      price="$350"
-                    />
-                    <FlightRow
-                      airline="United"
-                      time="07:45 — 12:30"
-                      details="Nonstop · 4h 45m"
-                      price="$390"
-                    />
-                  </div>
-                )}
+            {!loading && !error && filteredFlights.length === 0 && params && (
+              <div className="text-center py-20 text-indigo-300 bg-indigo-900/20 rounded-xl border border-dashed border-white/10">
+                <p className="text-lg font-medium">No flights found</p>
+                <p className="text-sm">Try adjusting your filters or dates</p>
+              </div>
+            )}
+
+            {!params && (
+              <div className="space-y-3">
+                <h3 className="font-medium text-indigo-200 px-1">
+                  Popular Offers
+                </h3>
+                <FlightRow
+                  airline="Delta"
+                  time="08:00 — 11:10"
+                  details="Nonstop · 3h 10m"
+                  price="$350"
+                />
+                <FlightRow
+                  airline="United"
+                  time="07:45 — 12:30"
+                  details="Nonstop · 4h 45m"
+                  price="$390"
+                />
               </div>
             )}
           </div>

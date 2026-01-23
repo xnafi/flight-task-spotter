@@ -5,7 +5,7 @@ import logo from "../../../public/assets/logo.png";
 const Navbar = () => {
   return (
     <nav className="shadow-md w-full z-30 lg:h-15 md:mb-5 mb-0">
-      <div className="container mx-auto h-25 py-0!">
+      <div className="container mx-auto h-18 py-0!">
         <div className="flex items-center justify-between pb-4">
           <div className="shrink-0">
             <Link href="/">
@@ -14,7 +14,7 @@ const Navbar = () => {
                 width={200}
                 height={100}
                 alt="logo"
-                className="w-40 lg:w-40 rounded-xl"
+                className="w-28 md:w-36 lg:w-40 rounded-xl"
               />
             </Link>
           </div>
