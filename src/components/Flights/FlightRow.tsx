@@ -12,7 +12,7 @@ export function FlightRow({ airline, time, details, price }: FlightRowProps) {
         {/* Airline / Time */}
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center font-bold text-xs border border-indigo-400/50 shrink-0">
-            <span className="text-indigo-200">
+            <span className="text-white">
               {airline.slice(0, 2).toUpperCase()}
             </span>
           </div>
