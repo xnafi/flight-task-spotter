@@ -48,4 +48,51 @@ export const popularFlights: FlightOffer[] = [
       },
     ],
   } as FlightOffer,
+
+  {
+    id: "popular-4",
+    price: { grandTotal: "450" },
+    itineraries: [
+      {
+        duration: "PT6H20M",
+        segments: [
+          {
+            departure: { at: "2026-02-01T13:45:00" },
+            carrierCode: "EK",
+          },
+        ],
+      },
+    ],
+  } as FlightOffer,
+
+  {
+    id: "popular-5",
+    price: { grandTotal: "380" },
+    itineraries: [
+      {
+        duration: "PT4H50M",
+        segments: [
+          {
+            departure: { at: "2026-02-01T16:10:00" },
+            carrierCode: "QR",
+          },
+        ],
+      },
+    ],
+  } as FlightOffer,
+  {
+    id: "popular-6",
+    price: { grandTotal: "180" },
+    itineraries: [
+      {
+        duration: "PT4H50M",
+        segments: [
+          {
+            departure: { at: "2026-02-01T16:10:00" },
+            carrierCode: "QR",
+          },
+        ],
+      },
+    ],
+  } as FlightOffer,
 ];
