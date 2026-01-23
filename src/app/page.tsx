@@ -9,7 +9,7 @@ import { FiltersSidebar } from "@/components/Flights/FiltersSidebar";
 import { ErrorMessage } from "@/components/Flights/ErrorMessage";
 import { SearchSummary } from "@/components/Flights/SearchSummary";
 import { FlightCard } from "@/components/Flights/FlightCard";
-import { PriceTrendChart } from "@/components/Flights/PriceTrendChart";
+
 import { FlightRow } from "@/components/Flights/FlightRow";
 
 import { searchParamsSchema } from "@/lib/validation";
@@ -18,6 +18,7 @@ import {
   FlightSearchResponse,
   SearchParams,
 } from "@/types/allTypes";
+import { PriceTrendChart } from "@/components/Flights/PriceTrendChart";
 
 export default function FlightSearchPage() {
   const searchParams = useSearchParams();
@@ -30,9 +31,6 @@ export default function FlightSearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  /**
-   * Fetch flights when search params change
-   */
   useEffect(() => {
     if (!hasSearchParams || !searchParams) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -77,7 +75,7 @@ export default function FlightSearchPage() {
       .then((result: FlightSearchResponse) => {
         const data = result.data || [];
         setFlights(data);
-        setFilteredFlights(data); // baseline for filters
+        setFilteredFlights(data);
       })
       .catch((err) => {
         setError(err.message);
@@ -114,7 +112,8 @@ export default function FlightSearchPage() {
           <div className="col-span-3 space-y-4">
             {params && (
               <>
-                <PriceTrendChart />
+                {/* LIVE GRAPH */}
+                <PriceTrendChart flights={filteredFlights} />
                 <SearchSummary params={params} />
               </>
             )}
@@ -141,8 +140,6 @@ export default function FlightSearchPage() {
 
             {!loading && !error && filteredFlights.length === 0 && (
               <div className="space-y-4">
-                {!params && <PriceTrendChart />}
-
                 {params ? (
                   <div className="text-center py-20 text-indigo-300 bg-indigo-900/20 rounded-xl border border-dashed border-white/10">
                     <p className="text-lg font-medium">No flights found</p>

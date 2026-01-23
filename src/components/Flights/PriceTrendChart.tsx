@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -10,111 +9,67 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { getPriceTrend, PriceTrendData } from "@/lib/getPriceTrend";
+import { FlightOffer } from "@/types/allTypes";
+import { useMemo } from "react";
 
-interface PriceTrendChartProps {
-  origin?: string;
-  destination?: string;
-  departureDate?: string;
+interface PriceGraphProps {
+  flights: FlightOffer[];
 }
 
-export function PriceTrendChart({
-  origin = "JFK",
-  destination = "LHR",
-  departureDate = new Date().toISOString().split("T")[0],
-}: PriceTrendChartProps) {
-  const [data, setData] = useState<PriceTrendData[]>([]);
-  const [loading, setLoading] = useState(true);
+export function PriceTrendChart({ flights }: PriceGraphProps) {
+  const data = useMemo(() => {
+    return flights.map((flight, index) => {
+      const price = Number(flight.price.grandTotal);
+      const depTime = flight.itineraries[0]?.segments[0]?.departure.at;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const trends = await getPriceTrend({
-          origin,
-          destination,
-          departureDate,
-        });
-        setData(trends);
-      } catch (error) {
-        console.error("Failed to fetch price trends:", error);
-        // Fallback to default data if fetch fails
-        setData([
-          { day: "May 25", price: 620, date: "2024-05-25" },
-          { day: "May 26", price: 740, date: "2024-05-26" },
-          { day: "May 27", price: 600, date: "2024-05-27" },
-          { day: "May 28", price: 680, date: "2024-05-28" },
-          { day: "May 29", price: 630, date: "2024-05-29" },
-          { day: "May 30", price: 710, date: "2024-05-30" },
-          { day: "May 31", price: 760, date: "2024-05-31" },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      return {
+        label: depTime
+          ? new Date(depTime).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : `#${index + 1}`,
+        price,
+      };
+    });
+  }, [flights]);
 
-    fetchData();
-
-    // Set up real-time updates every 5 minutes
-    const interval = setInterval(fetchData, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, [origin, destination, departureDate]);
-  return (
-    <div className="rounded-xl p-4 text-white border border-[#12a4e5]">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-white">
-          Price Trend (Next 7 Days)
-        </h3>
-        {loading && (
-          <span className="text-xs text-indigo-400 animate-pulse">
-            Updating...
-          </span>
-        )}
+  if (!data.length) {
+    return (
+      <div className="rounded-xl border border-indigo-400 p-4 text-indigo-300">
+        No flights to display on price graph
       </div>
+    );
+  }
 
-      <div className="h-40">
+  return (
+    <div className="rounded-xl p-4 border border-[#12a4e5] bg-slate-900 text-white">
+      <h3 className="mb-4 font-semibold">
+        Live Price Graph ({data.length} flights)
+      </h3>
+
+      <div className="h-48">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            {/* Grid */}
             <CartesianGrid
               stroke="rgba(255,255,255,0.15)"
               strokeDasharray="3 3"
             />
-
-            {/* X Axis */}
-            <XAxis
-              dataKey="day"
-              tick={{ fill: "#ffffff", fontSize: 12 }}
-              axisLine={{ stroke: "#ffffff" }}
-              tickLine={{ stroke: "#ffffff" }}
-            />
-
-            {/* Y Axis */}
-            <YAxis
-              tick={{ fill: "#ffffff", fontSize: 12 }}
-              axisLine={{ stroke: "#ffffff" }}
-              tickLine={{ stroke: "#ffffff" }}
-            />
-
-            {/* Tooltip */}
+            <XAxis dataKey="label" tick={{ fill: "#ffffff", fontSize: 12 }} />
+            <YAxis tick={{ fill: "#ffffff", fontSize: 12 }} />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#0f172a", // dark slate
+                backgroundColor: "#0f172a",
+                borderRadius: 8,
                 border: "1px solid rgba(255,255,255,0.2)",
-                borderRadius: "8px",
-                color: "#ffffff",
               }}
-              labelStyle={{ color: "#ffffff" }}
-              itemStyle={{ color: "#ffffff" }}
             />
-
-            {/* Line */}
             <Line
               type="monotone"
               dataKey="price"
               stroke="#12a4e5"
               strokeWidth={3}
-              dot={{ r: 4, stroke: "#12a4e5", fill: "#12a4e5" }}
+              dot={{ r: 4 }}
               activeDot={{ r: 6 }}
             />
           </LineChart>
