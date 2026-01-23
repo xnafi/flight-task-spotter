@@ -93,7 +93,7 @@ export default function FlightSearchPage() {
   const graphTitle = params ? "Search Price Trend" : "Popular Flight Prices";
 
   return (
-    <div className="min-h-screen md:mt-10">
+    <main className="min-h-screen md:mt-10">
       <div className="mx-auto backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden space-y-6">
         <SearchBar />
 
@@ -171,6 +171,6 @@ export default function FlightSearchPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
