@@ -3,7 +3,6 @@
 A modern, responsive flight search application built with **Next.js**, featuring live flight results, advanced filtering, and a real-time price visualization.
 
 Live Demo: https://flight-task-spotter.vercel.app  
-GitHub Repo: (add your repo link here)
 
 ---
 
