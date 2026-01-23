@@ -20,7 +20,7 @@ export function ReInput({
         value={value}
         onChange={onChange}
         placeholder={placeHolder}
-        className={` peer w-full text-md px-2.5 pt-4 pb-2 border-2 cursor-pointer border-[#12a4e5] rounded-[5px] focus:outline-none placeholder:text-transparent${className}`}
+        className={` peer w-full text-md focus:bg-transparent px-2.5 pt-4 pb-2 border-2 cursor-pointer border-[#12a4e5] rounded-[5px] focus:outline-none placeholder:text-transparent${className}`}
         {...rest}
       />
 
